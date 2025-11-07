@@ -17,8 +17,7 @@ import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static io.github.venkateshamurthy.enums.TestDynamicEnum.ALPHA;
-import static io.github.venkateshamurthy.enums.TestDynamicEnum.UNKNOWN;
+import static io.github.venkateshamurthy.enums.SampleDynamicEnum.ALPHA;
 import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 class DynamicEnumTest {
@@ -28,8 +27,8 @@ class DynamicEnumTest {
         assertEquals("ALPHA", ALPHA.name());
         assertEquals(0, ALPHA.ordinal());
 
-        assertEquals("BETA", TestDynamicEnum.BETA.name());
-        assertEquals(1, TestDynamicEnum.BETA.ordinal());
+        assertEquals("BETA", SampleDynamicEnum.BETA.name());
+        assertEquals(1, SampleDynamicEnum.BETA.ordinal());
     }
 
     @Test
@@ -39,7 +38,7 @@ class DynamicEnumTest {
         assertEquals(ALPHA.hashCode(), ALPHA.hashCode());
 
         // Different constants are not equal
-        assertNotEquals(ALPHA, TestDynamicEnum.BETA);
+        assertNotEquals(ALPHA, SampleDynamicEnum.BETA);
     }
 
     @Test
@@ -51,13 +50,13 @@ class DynamicEnumTest {
 
     @Test
     void testDuplicateInstanceThrows() throws NoSuchMethodException {
-        final Constructor<TestDynamicEnum> c = TestDynamicEnum.class.getDeclaredConstructor(String.class);
+        final Constructor<SampleDynamicEnum> c = SampleDynamicEnum.class.getDeclaredConstructor(String.class);
         c.setAccessible(true);
         InvocationTargetException ex = assertThrows(InvocationTargetException.class, () -> {
             c.newInstance("ALPHA");
         });
         assertInstanceOf(RuntimeException.class, ex.getCause());
-        assertEquals(TestDynamicEnum.class.getName() + " - Duplicate instances are not allowed :ALPHA",
+        assertEquals(SampleDynamicEnum.class.getName() + " - Duplicate instances are not allowed :ALPHA",
                 ex.getCause().getMessage());
         c.setAccessible(false);
     }
@@ -73,12 +72,12 @@ class DynamicEnumTest {
     @Test
     @SneakyThrows
     void testSerDeser() {
-        TestDynamicEnum testEnum = TestDynamicEnum.UNKNOWN;
-        final ObjectMapper mapper = DynamicEnum.getDefaultMapper(TestDynamicEnum.class);
+        SampleDynamicEnum testEnum = SampleDynamicEnum.UNKNOWN;
+        final ObjectMapper mapper = DynamicEnum.getDefaultMapper(SampleDynamicEnum.class);
         final String alpha = mapper.writeValueAsString(ALPHA);
-        //assertEquals("{\"type\":\"TestDynamicEnum\",\"name\":\"ALPHA\"}", alpha);
-        assertEquals("[\"TestDynamicEnum\",\"ALPHA\"]", alpha);
-        final TestDynamicEnum enumAlpha = mapper.readValue(alpha, TestDynamicEnum.class);
+        //assertEquals("{\"type\":\"SampleDynamicEnum\",\"name\":\"ALPHA\"}", alpha);
+        assertEquals("[\"SampleDynamicEnum\",\"ALPHA\"]", alpha);
+        final SampleDynamicEnum enumAlpha = mapper.readValue(alpha, SampleDynamicEnum.class);
         assertEquals(ALPHA, enumAlpha);
     }
 
@@ -157,7 +156,7 @@ class DynamicEnumTest {
         @SuppressWarnings("unchecked")
         Map<Class<? extends DynamicEnum>, ?> values =
                 (Map<Class<? extends DynamicEnum>, ?>) valuesField.get(null);
-        values.remove(TestDynamicEnum.class);
+        values.remove(SampleDynamicEnum.class);
     }
 
     private static class Color extends DynamicEnum<Color> {
