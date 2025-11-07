@@ -31,9 +31,9 @@ public final class Faults extends DynamicEnum<Faults> implements FaultCode {
     /** Unknown error. The field name and the {@link #name()} should match to see this close to an enum.*/
     public static final Faults UNKNOWN = new Faults("UNKNOWN", StringUtils.EMPTY, UNPROCESSABLE_ENTITY);
 
-    /** File already locked fault with a corresponding {@link HttpStatus#DESTINATION_LOCKED}.*/
+    /** File already locked fault with a corresponding {@link HttpStatus#LOCKED}.*/
     public static final Faults FILE_LOCKED_ERR = new Faults("FILE_LOCKED_ERR",
-            "Destination file is already locked. Cannot Lock again", DESTINATION_LOCKED);
+            "Destination file is already locked. Cannot Lock again", LOCKED);
 
     /** File checksum error with a corresponding {@link HttpStatus#UNPROCESSABLE_ENTITY}.*/
     public static final Faults FILE_LNCK_ERR = new Faults("FILE_LNCK_ERR",

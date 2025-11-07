@@ -16,8 +16,8 @@ public enum Issues implements FaultCode {
     /** Unknown error. The field name and the {@link #name()} should match to see this close to an enum.*/
     UNKNOWN (StringUtils.EMPTY, UNPROCESSABLE_ENTITY),
 
-    /** File already locked fault with a corresponding {@link HttpStatus#DESTINATION_LOCKED}.*/
-    FILE_LOCKED_ERR("Destination file is already locked. Cannot Lock again", DESTINATION_LOCKED),
+    /** File already locked fault with a corresponding {@link HttpStatus#LOCKED}.*/
+    FILE_LOCKED_ERR("Destination file is already locked. Cannot Lock again", LOCKED),
 
     /** File checksum error with a corresponding {@link HttpStatus#UNPROCESSABLE_ENTITY}.*/
     FILE_LNCK_ERR("File length/checksum did not match", UNPROCESSABLE_ENTITY),
