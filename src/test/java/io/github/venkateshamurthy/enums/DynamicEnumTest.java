@@ -160,7 +160,7 @@ class DynamicEnumTest {
     }
 
     private static class Color extends DynamicEnum<Color> {
-        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance(Locale.getDefault()));
+        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance("AUD"));
         public static final Color RED = new Color("RED", Currency.getInstance("INR"));
         public static final Color GREEN = new Color("GREEN", Currency.getInstance("USD"));
         public static final Color BLUE = new Color("BLUE", Currency.getInstance("CAD"));
