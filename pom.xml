@@ -8,7 +8,7 @@
     </parent>
     <artifactId>dynamic-enum</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-RC1</version>
+    <version>1.0.1-SNAPSHOT</version>
     <description>A lightweight Java library that provides dynamic, runtime-extensible enums.</description>
     <name>dynamic-enum</name>
     <url>https://central.sonatype.com/artifact/io.github.venkateshamurthy/dynamic-enum</url>
