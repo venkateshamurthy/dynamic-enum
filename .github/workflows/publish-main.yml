@@ -2,7 +2,7 @@ permissions:
   contents: write
   packages: write
 
-name: Build, Analyze, and Publish (Maven Central + GitHub Packages)
+name: Build, Analyze, and Publish (Maven Central + GitHub Packages) for main branch
 
 on:
   push:
