@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +54,7 @@ public class DynamicEnumSetTest {
         public static final Shade DEEPRED = new Shade("DEEPRED");
         public static final Shade DEEPBLUE = new Shade("DEEPBLUE");
         private Shade(String name) {
-            super(name, Currency.getInstance(Locale.getDefault()));
+            super(name, Currency.getInstance("AUD"));
         }
     }
 
