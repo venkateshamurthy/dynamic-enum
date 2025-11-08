@@ -78,7 +78,8 @@ fi
 # --- Commit, tag, push ---
 if ! $DRY_RUN; then
   git add pom.xml
-  git commit -m "chore(release): ${NEW_VERSION}"
+  read -rp "📝  Enter additional commit message (optional): " EXTRA_MSG
+  git commit -m "chore(release): ${NEW_VERSION}${EXTRA_MSG:+ – $EXTRA_MSG}"
   git tag "${PREFIX}${NEW_VERSION}"
 
   echo ""

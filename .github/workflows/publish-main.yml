@@ -99,7 +99,7 @@ jobs:
           mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.organization=${{ env.SONAR_ORG }} \
             -Dsonar.projectKey=io.github.venkateshamurthy:dynamic-enum \
-            -Dsonar.branch=main \
+            -Dsonar.branch.name=${GITHUB_REF_NAME} \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ env.SONAR_TOKEN }} \
             -Dsonar.qualitygate.wait=true

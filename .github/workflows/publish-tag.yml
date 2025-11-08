@@ -99,6 +99,7 @@ jobs:
           mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.organization=${{ env.SONAR_ORG }} \
             -Dsonar.projectKey=io.github.venkateshamurthy:dynamic-enum \
+            -Dsonar.branch.name=${GITHUB_REF_NAME} \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ env.SONAR_TOKEN }} \
             -Dsonar.qualitygate.wait=true
@@ -113,7 +114,7 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "🔖 Releasing version: $VERSION from base POM (eg: 1.0.0-SNAPSHOT)"
           mvn -B versions:set -DnewVersion=$VERSION
-          mvn -B clean deploy -Prelease-profile -Psecurity-scan
+          mvn -B clean deploy  -Psecurity-scan
 
       # ============================================================
       # 7️⃣ Deploy to GitHub Packages
