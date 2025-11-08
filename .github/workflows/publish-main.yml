@@ -81,16 +81,31 @@ jobs:
              echo "❌ ERROR: Imported GPG key does not match expected key ID: $EXPECTED_KEY_ID"
              exit 2
           fi
+          
 
       # ============================================================
-      # 4️⃣ Build and test locally
+      # 4️⃣🔒 NVD / OWASP Dependency Check
+      # Caches NVD data + uses secret API key for fast lookup
+      # ============================================================
+      - name: Cache OWASP Dependency Check data
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          # key: owasp-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          key: owasp-cache
+
+      - name: Run OWASP Dependency Check
+        run: mvn -B org.owasp:dependency-check-maven:check -Dnvd.api.key=${{ secrets.NVD_API_KEY }}
+
+      # ============================================================
+      # 5️⃣ Build and test locally
       # Uses only Maven config – does not deploy yet
       # ============================================================
       - name: Build and verify
-        run: mvn -B clean verify -P release-profile
+        run: mvn -B clean verify
 
       # ============================================================
-      # 5️⃣ (Optional) Static analysis with SonarCloud
+      # 6️⃣ (Optional) Static analysis with SonarCloud
       # Uses SONAR_TOKEN + SONAR_ORG for external reporting
       # ============================================================
       - name: SonarCloud analysis
@@ -104,9 +119,9 @@ jobs:
             -Dsonar.login=${{ env.SONAR_TOKEN }} \
             -Dsonar.qualitygate.wait=true
 
-      # 6️⃣ Publish Snapshot (only on main)
+      # 7️⃣ Publish Snapshot (only on main)
       - name: Publish Snapshot to Sonatype Central
-        run: mvn -B clean deploy  -Psecurity-scan
+        run: mvn -B clean deploy
 
 
       # ============================================================

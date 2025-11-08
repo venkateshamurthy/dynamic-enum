@@ -83,14 +83,28 @@ jobs:
           fi
 
       # ============================================================
-      # 4️⃣ Build and test locally
+      # 4️⃣🔒 NVD / OWASP Dependency Check
+      # Caches NVD data + uses secret API key for fast lookup
+      # ============================================================
+      - name: Cache OWASP Dependency Check data
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          # key: owasp-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          key: owasp-cache
+
+      - name: Run OWASP Dependency Check
+        run: mvn -B org.owasp:dependency-check-maven:check -Dnvd.api.key=${{ secrets.NVD_API_KEY }}
+
+      # ============================================================
+      # 5️⃣ Build and test locally
       # Uses only Maven config – does not deploy yet
       # ============================================================
       - name: Build and verify
-        run: mvn -B clean verify -P release-profile
+        run: mvn -B clean verify
 
       # ============================================================
-      # 5️⃣ (Optional) Static analysis with SonarCloud
+      # 6️⃣ (Optional) Static analysis with SonarCloud
       # Uses SONAR_TOKEN + SONAR_ORG for external reporting
       # ============================================================
       - name: SonarCloud analysis
@@ -105,7 +119,7 @@ jobs:
             -Dsonar.qualitygate.wait=true
 
       # ============================================================
-      # 6️⃣ Deploy to Maven Central
+      # 7️⃣ Deploy to Maven Central
       # Uses MAVEN_CENTRAL_USER + MAVEN_CENTRAL_TOKEN
       # and your GPG credentials for signing.
       # ============================================================
@@ -114,10 +128,10 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "🔖 Releasing version: $VERSION from base POM (eg: 1.0.0-SNAPSHOT)"
           mvn -B versions:set -DnewVersion=$VERSION
-          mvn -B clean deploy  -Psecurity-scan
+          mvn -B clean deploy
 
       # ============================================================
-      # 7️⃣ Deploy to GitHub Packages
+      # 8️⃣ Deploy to GitHub Packages
       # Uses GH_TOKEN (your personal PAT) because
       # built-in GITHUB_TOKEN lacks write:packages permission.
       # ============================================================
@@ -127,7 +141,7 @@ jobs:
             -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/${{ github.repository }}
 
       # ============================================================
-      # 8️⃣ Generate Javadocs
+      # 9️⃣ Generate Javadocs
       # Uses the built-in GITHUB_TOKEN because it is injected by GitHub itself
       # and further automatically has write access to the current repo’s gh-pages branch.
       # ============================================================
