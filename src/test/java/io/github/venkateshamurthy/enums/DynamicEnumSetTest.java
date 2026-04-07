@@ -2,16 +2,14 @@ package io.github.venkateshamurthy.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Currency;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,41 +18,27 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Slf4j
 public class DynamicEnumSetTest {
-
+    private record Hue(String name, @JsonProperty Currency currency) implements DynamicEnum<Hue> {
+        public static final Hue NO = new Hue("No",Currency.getInstance(Locale.getDefault()));
+    }
     // Concrete test dynamic enum type
     //@JsonTypeName("color")
-    private static class Color extends DynamicEnum<Color> {
-        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance("AUD"));
+    private record Color(String name, @JsonProperty Currency currency) implements DynamicEnum<Color>, ObjectMapped {
+        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance(Locale.getDefault()));
         public static final Color RED = new Color("RED", Currency.getInstance("INR"));
         public static final Color GREEN = new Color("GREEN", Currency.getInstance("USD"));
         public static final Color BLUE = new Color("BLUE", Currency.getInstance("CAD"));
-        @JsonProperty private final Currency currency;
-
-        @Builder
-        private Color(@JsonProperty String name, @JsonProperty Currency currency) {super(name); this.currency=currency;}
-
-        public static ObjectMapper getDefaultMapper() {
-            return DynamicEnum.getDefaultMapper(Color.class);
-        }
+        public Color{
+            register(name);}
 
         public static Color[] values() {
-            return DynamicEnum.values(Color.class, Color[]::new);
+            return DynamicEnum.values(Color.class);
         }
 
         public static Color valueOf(String name) {
             return Try.of(()->DynamicEnum.valueOf(Color.class, name))
+                    .map(en->(Color)en)
                     .getOrElse(()->UNKNOWN);
-        }
-    }
-
-    /**
-     * Deliberate extended class to ensure map actions will fail.
-     */
-    private static class Shade extends DynamicEnumSetTest.Color {
-        public static final Shade DEEPRED = new Shade("DEEPRED");
-        public static final Shade DEEPBLUE = new Shade("DEEPBLUE");
-        private Shade(String name) {
-            super(name, Currency.getInstance("AUD"));
         }
     }
 
@@ -70,12 +54,12 @@ public class DynamicEnumSetTest {
         assertTrue(colorSet.add(Color.RED));
         assertTrue(colorSet.contains(Color.RED));
         assertEquals(1, colorSet.size());
-        log.info("{}",Color.getDefaultMapper().writeValueAsString(Color.RED));
+        log.info("{}",Color.RED.getDefaultMapper().writeValueAsString(Color.RED));
     }
 
     @Test
     void testAddNullThrows() {
-        assertThrows(NullPointerException.class, () -> colorSet.add(null));
+        assertDoesNotThrow(() -> colorSet.add(null));
     }
 
     @Test
@@ -120,10 +104,4 @@ public class DynamicEnumSetTest {
         assertEquals(3, Color.BLUE.ordinal());
     }
 
-    @Test
-    void testAllMutatorsRejectWrongType() {
-        Color wrongRed = Shade.DEEPRED, wrongBlue = Shade.DEEPBLUE;
-        assertThrows(IllegalArgumentException.class, () -> colorSet.add(wrongRed));
-        assertThrows(IllegalArgumentException.class, () -> colorSet.addAll(Set.of(wrongRed, wrongBlue)));
-    }
 }

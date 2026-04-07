@@ -1,8 +1,6 @@
 package io.github.venkateshamurthy.enums;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.control.Try;
-import lombok.Builder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,25 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DynamicEnumMapTest {
 
     // --- Test DynamicEnum subclasses ---
-    private static class Color extends DynamicEnum<Color> {
+    private  record Color(String name) implements DynamicEnum<Color> {
         public static final Color RED   = new Color("RED");
         public static final Color GREEN = new Color("GREEN");
         public static final Color BLUE  = new Color("BLUE");
         public static final Color UNKNOWN  = new Color("UNKNOWN");
-        @Builder
-        private Color(@JsonProperty String name) {super(name);}
 
         public static Color valueOf(String name) {
             return Try.of(()->DynamicEnum.valueOf(Color.class, name))
+                    .map(Color.class::cast)
                     .getOrElse(()->UNKNOWN);
-        }
-    }
-
-    /** Deliberate extended class to ensure map actions will fail.*/
-    private static class Shade extends Color{
-        public static final Shade DEEPRED = new Shade("DEEPRED");
-        private Shade(String name) {
-            super(name);
         }
     }
 
@@ -136,27 +125,6 @@ public class DynamicEnumMapTest {
     // Validation (type safety & exceptions)
     // --------------------------------------------------------------------
 
-    @Test
-    void testPutRejectsDifferentType() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            @SuppressWarnings("unchecked")
-            Color wrong = Shade.DEEPRED;
-            map.put(wrong, "invalid");
-        });
-        assertTrue(ex.getMessage().contains("does not match"));
-    }
-
-    @Test
-    void testAllMutatorsRejectWrongType() {
-        Color wrong = Shade.DEEPRED;
-        assertThrows(IllegalArgumentException.class, () -> map.replace(wrong, "x"));
-        assertThrows(IllegalArgumentException.class, () -> map.replace(wrong, "old", "new"));
-        assertThrows(IllegalArgumentException.class, () -> map.merge(wrong, "v", String::concat));
-        assertThrows(IllegalArgumentException.class, () -> map.compute(wrong, (k, v) -> "v2"));
-        assertThrows(IllegalArgumentException.class, () -> map.putIfAbsent(wrong, "v"));
-        assertThrows(IllegalArgumentException.class, () -> map.computeIfAbsent(wrong, k -> "v"));
-        assertThrows(IllegalArgumentException.class, () -> map.computeIfPresent(wrong, (k, v) -> "v2"));
-    }
 
     // --------------------------------------------------------------------
     // Fluent chaining and map behavior
@@ -186,7 +154,6 @@ public class DynamicEnumMapTest {
         map.putIfAbsent(Color.RED, "b");
         assertEquals("a", map.get(Color.RED));
     }
-
     @Test
     void testReplaceThreeArgFailsIfOldValueWrong() {
         map.put(Color.GREEN, "grass");

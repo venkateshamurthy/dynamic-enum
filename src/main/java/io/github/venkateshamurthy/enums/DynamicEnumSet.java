@@ -3,6 +3,7 @@ package io.github.venkateshamurthy.enums;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
@@ -36,18 +37,7 @@ public class DynamicEnumSet<E extends DynamicEnum<E>> extends LinkedHashSet<E> {
      */
     public static <T extends DynamicEnum<T>> DynamicEnumSet<T> dynamicEnumSet(@NonNull final Class<T> clazz) {
         DynamicEnumSet<T> set = new DynamicEnumSet<>(clazz);
-        DynamicEnum.allOf(clazz).forEach(e ->{set.add((T) e);});
+        Arrays.stream(DynamicEnum.values(clazz)).forEach(e ->{set.add((T) e);});
         return set;
-    }
-
-    /**
-     * {@inheritDoc}.
-     * <p>
-     * Further the element getting added will be checked for the class type
-     */
-    public boolean add(@NonNull E e) {
-        if (! enumClass.equals(e.getClass()))
-            throw new IllegalArgumentException("Passed key "+e+" does not match "+enumClass);
-        return super.add(e);
     }
 }

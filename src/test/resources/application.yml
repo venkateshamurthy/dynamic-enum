@@ -1,0 +1,15 @@
+app:
+  errors:
+    - name: "MAIL_ERR"
+      description: "Mail is bad formatted"
+      status: "BAD_REQUEST"
+    - name: "MQ_ERR"
+      description: "The requested message was not found"
+      status: "NOT_FOUND"
+  faults:
+    - name: "MAIL_ERR"
+      description: "Mail is bad formatted"
+      status: "BAD_REQUEST"
+    - name: "MQ_ERR"
+      description: "The requested message was not found"
+      status: "NOT_FOUND"

@@ -1,0 +1,12 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+    echo "variable tag is empty (should be of the form \"ls dynamic-enum-1.0*\") so program will exit now!"
+    exit 1
+fi
+echo "args: $1"
+list=`$1`
+for entry in $list; do
+  echo "entry : $entry"
+   md5sum  $entry | cut -d ' ' -f 1 > $entry.md5;
+   sha1sum $entry | cut -d ' ' -f 1 > $entry.sha1;
+done
