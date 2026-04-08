@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.vavr.control.Try;
 import lombok.NonNull;
+
+import java.util.function.Supplier;
 
 /**
  * DynamicEnum is a convenience structure over static {@link Enum} to add dynamically more instances.
@@ -73,5 +76,37 @@ public interface DynamicEnum<E extends DynamicEnum<E>>  {
     static <T extends DynamicEnum<T>> T valueOf(@NonNull final Class<?> clazz,
                                                 @NonNull final String name) {
         return Internal.valueOf(clazz, name);
+    }
+
+    /**
+     * valueOf provides the dynamic enum corresponding to the name.
+     *
+     * @param clazz is the dynamic enum class
+     * @param name of the dynamic enum for which the corresponding subcclass of {@link DynamicEnum} is to fetched
+     * @param defaultEnumProvider is a supplied default in case if the primary enum is not recognized
+     * @return T
+     * @param <T> is basically the &lt;T extends DynamicEnum&lt;T&gt;&gt;
+     * @throws RuntimeException when name does not match what is cached with in
+     */
+    static <T extends DynamicEnum<T>> T valueOf(@NonNull final Class<?> clazz,
+                                                @NonNull final String name,
+                                                @NonNull final Supplier<T> defaultEnumProvider) {
+        return Try.ofSupplier(() -> DynamicEnum.<T>valueOf(clazz, name)).getOrElse(defaultEnumProvider);
+    }
+
+    /**
+     * valueOf provides the dynamic enum corresponding to the name.
+     *
+     * @param clazz is the dynamic enum class
+     * @param name of the dynamic enum for which the corresponding subcclass of {@link DynamicEnum} is to fetched
+     * @param defaultEnumName is a supplied default in case if the primary enum is not recognized
+     * @return T
+     * @param <T> is basically the &lt;T extends DynamicEnum&lt;T&gt;&gt;
+     * @throws RuntimeException when name does not match what is cached with in
+     */
+    static <T extends DynamicEnum<T>> T valueOf(@NonNull final Class<?> clazz,
+                                                @NonNull final String name,
+                                                @NonNull final String defaultEnumName) {
+        return valueOf(clazz, name, () -> DynamicEnum.<T>valueOf(clazz, defaultEnumName));
     }
 }

@@ -10,16 +10,17 @@ public record TestDynamicEnum(@JsonProperty String name) implements DynamicEnum<
     public static final TestDynamicEnum ALPHA = new TestDynamicEnum("ALPHA");
     public static final TestDynamicEnum BETA  = new TestDynamicEnum("BETA");
     public static final TestDynamicEnum UNKNOWN = new TestDynamicEnum("UNKNOWN");
+
     public TestDynamicEnum {
-        register(name);}
+        register(name);
+    }
+
     public static TestDynamicEnum[] values() {
         return DynamicEnum.values(TestDynamicEnum.class);
     }
 
     @JsonCreator
     public static TestDynamicEnum valueOf(@JsonProperty String name) {
-        return Try.of(()->DynamicEnum.valueOf(TestDynamicEnum.class, name))
-                .map(TestDynamicEnum.class::cast)
-                .getOrElse(()->UNKNOWN);
+        return DynamicEnum.valueOf(TestDynamicEnum.class, name, ()->UNKNOWN);
     }
 }

@@ -51,9 +51,11 @@ class DynamicEnumTest {
         public EmptyEnum {
             register(name);}
     }
-    record UncapturedEmptyEnum(String name) implements DynamicEnum<UncapturedEmptyEnum>{
+
+    private record UncapturedEmptyEnum(String name) implements DynamicEnum<UncapturedEmptyEnum>{
         //public EmptyEnum {captureInstance(name);}
     }
+
     @Test
     void testEmptyInstanceSet(){
         assertEquals(0, DynamicEnum.values(UncapturedEmptyEnum.class).length);
@@ -79,6 +81,7 @@ class DynamicEnumTest {
         assertEquals(4, colors.length);
         Set<String> colorSet =  Set.of("RED", "GREEN", "BLUE", "UNKNOWN");
         assertEquals(colorSet, Arrays.stream(colors).map(DynamicEnum::name).collect(Collectors.toSet()));
+        assertEquals(Color.UNKNOWN, Color.valueOf("MAGENTA", "UNKNOWN"));
     }
 
     @Test
@@ -117,6 +120,10 @@ class DynamicEnumTest {
 
         public static Color valueOf(String name){
             return DynamicEnum.valueOf(Color.class, name);
+        }
+
+        public static Color valueOf(String name, String def){
+            return DynamicEnum.valueOf(Color.class, name, def);
         }
 
     }
