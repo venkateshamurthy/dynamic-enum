@@ -37,7 +37,7 @@
         </developer>
     </developers>
     <properties>
-        <revision>1.0.7-SNAPSHOT</revision>
+        <revision>1.0.8-SNAPSHOT</revision>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <nvd.api.endpoint>https://services.nvd.nist.gov/rest/json/cves/2.0/</nvd.api.endpoint>
         <main.class>io.github.venkateshamurthy.App</main.class>
