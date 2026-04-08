@@ -25,4 +25,9 @@ public class ErrorRegistryConfig {
             }
         };
     }
+
+    @Bean
+    public StringToHttpStatusCodeConverter getStringToHttpStatusCodeConverter() {
+        return new StringToHttpStatusCodeConverter();
+    }
 }

@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.helpers.MessageFormatter;
-import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -26,7 +25,7 @@ import static java.time.ZonedDateTime.now;
  *     <li>{@code code} - Application or domain-specific error code</li>
  *     <li>{@code detailedMessage} - Detailed, formatted explanation of the error</li>
  *     <li>{@code timeStamp} - UTC timestamp when the error was created</li>
- *     <li>{@code httpStatus} - The {@link HttpStatus} representing the error category</li>
+ *     <li>{@code httpStatus} - The {@link HttpStatusCode} representing the error category</li>
  * </ul>
  * <p>
  * The class supports message formatting with templates, placeholder substitution, and structured logging
@@ -36,7 +35,7 @@ import static java.time.ZonedDateTime.now;
  * <pre>{@code
  * throw new CommonRTE(FaultCode.CREDENTIAL_MISSING,
  *     "Missing or invalid credential ID: {}", request.getCredentialId())
- *     .setHttpStatus(HttpStatus.BAD_REQUEST)
+ *     .setHttpStatus(HttpStatusCode.BAD_REQUEST)
  *     .logInfo();
  * }</pre>
  *
@@ -44,7 +43,7 @@ import static java.time.ZonedDateTime.now;
  *  * <pre>{@code
  *  * throw FaultCodes.CREDENTIAL_MISSING.toCommonRTE(
  *  *     "Missing or invalid credential ID: {}", request.getCredentialId())
- *  *     .setHttpStatus(HttpStatus.BAD_REQUEST)
+ *  *     .setHttpStatus(HttpStatusCode.BAD_REQUEST)
  *  *     .logInfo();
  *  * }</pre>
  * @author venkateshamurthy
@@ -72,7 +71,7 @@ public class CommonRTE extends RuntimeException implements Serializable {
     @Schema(description = "Error time")    private ZonedDateTime timeStamp;
 
     /** HTTP Status.*/
-    @Schema(description = "Http Status")   private HttpStatus httpStatus;
+    @Schema(description = "Http Status")   private HttpStatusCode httpStatus;
 
     /**
      * Constructs a new {@code CommonRTE} with the specified message.

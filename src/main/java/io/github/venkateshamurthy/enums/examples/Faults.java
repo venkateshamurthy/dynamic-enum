@@ -8,16 +8,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.vavr.control.Try;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.*;
+import static io.github.venkateshamurthy.enums.examples.HttpStatusCode.*;
 
 /**
  * Faults is an example {@link DynamicEnum} for experimental purpose that tries to alleviate the brittle nature of {@link Enum}.
  * Please note that this is a Java-17 record type implementation of {@link DynamicEnum} whereas {@link Errors} is of class type.
  * @param name name of the fault
  * @param description sets the details of the fault
- * @param status is a {@link HttpStatus} that can be used n Micros services
+ * @param status is a {@link HttpStatusCode} that can be used n Micros services
  */
 @JsonTypeName
 public record Faults (
@@ -26,23 +24,23 @@ public record Faults (
         @Getter @JsonProperty @Schema(description = "A short description of the fault/error", example = "File is already locked")
         String description,
         @Getter @JsonProperty @Schema(description = "A HTTP status such as BAD_REQUEST")
-        HttpStatus status) implements DynamicEnum<Faults>, FaultCode {
+        HttpStatusCode status) implements DynamicEnum<Faults>, FaultCode {
 
     /** Unknown error. The field name and the {@link #name()} should match to see this close to an enum.*/
     public static final Faults UNKNOWN = new Faults("UNKNOWN", StringUtils.EMPTY, UNPROCESSABLE_ENTITY);
 
-    /** File already locked fault with a corresponding {@link HttpStatus#LOCKED}.*/
+    /** File already locked fault with a corresponding {@link HttpStatusCode#LOCKED}.*/
     public static final Faults FILE_LOCKED_ERR = new Faults("FILE_LOCKED_ERR",
             "Destination file is already locked. Cannot Lock again", LOCKED);
 
-    /** File checksum error     with a corresponding {@link HttpStatus#UNPROCESSABLE_ENTITY}.*/
+    /** File checksum error     with a corresponding {@link HttpStatusCode#UNPROCESSABLE_ENTITY}.*/
     public static final Faults FILE_LNCK_ERR = new Faults("FILE_LNCK_ERR",
             "File length/checksum did not match", UNPROCESSABLE_ENTITY);
 
-    /** General validation error  with a corresponding {@link HttpStatus#BAD_REQUEST}.*/
+    /** General validation error  with a corresponding {@link HttpStatusCode#BAD_REQUEST}.*/
     public static final Faults VALIDATION_ERR = new Faults("VALIDATION_ERR", "Invalid Input", BAD_REQUEST);
 
-    /** Server error with a corresponding {@link HttpStatus#INTERNAL_SERVER_ERROR}*/
+    /** Server error with a corresponding {@link HttpStatusCode#INTERNAL_SERVER_ERROR}*/
     public static final Faults SERVER_ERR = new Faults("SERVER_ERR", "Internal server error", INTERNAL_SERVER_ERROR);
 
     /**
