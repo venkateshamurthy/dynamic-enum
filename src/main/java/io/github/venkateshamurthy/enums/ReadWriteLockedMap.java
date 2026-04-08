@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.*;
 import java.util.concurrent.locks.*;
 
+/** A read-write locking wrapper/decorator fro the map.*/
 @RequiredArgsConstructor
 public class ReadWriteLockedMap<K, V> implements Map<K, V> {
     private final Map<K, V> delegate;

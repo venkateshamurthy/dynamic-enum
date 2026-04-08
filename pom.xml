@@ -37,8 +37,8 @@
         </developer>
     </developers>
     <properties>
-        <revision>1.0.8-SNAPSHOT</revision>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <revision>1.0.9-SNAPSHOT</revision>
+        <maven.javadoc.skip>false</maven.javadoc.skip>
         <nvd.api.endpoint>https://services.nvd.nist.gov/rest/json/cves/2.0/</nvd.api.endpoint>
         <main.class>io.github.venkateshamurthy.App</main.class>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
@@ -121,6 +121,25 @@
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.3</version>
+                <configuration>
+                    <source>17</source>
+                    <excludes><exclude>**/test/**</exclude></excludes>
+                    <excludePackageNames>**/*Test</excludePackageNames>
+                    <failOnError>false</failOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
