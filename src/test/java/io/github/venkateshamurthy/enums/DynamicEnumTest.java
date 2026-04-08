@@ -105,7 +105,7 @@ class DynamicEnumTest {
     }
 
     private record Color(@JsonProperty String name, @JsonProperty Currency currency)  implements DynamicEnum<Color> {
-        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance(Locale.getDefault()));
+        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance(Locale.FRANCE));
         public static final Color RED = new Color("RED", Currency.getInstance("INR"));
         public static final Color GREEN = new Color("GREEN", Currency.getInstance("USD"));
         public static final Color BLUE = new Color("BLUE", Currency.getInstance("CAD"));

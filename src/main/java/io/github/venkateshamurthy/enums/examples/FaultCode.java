@@ -1,7 +1,5 @@
 package io.github.venkateshamurthy.enums.examples;
 
-import org.springframework.http.HttpStatus;
-
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -17,9 +15,9 @@ public interface FaultCode {
 
     /**
      * Gets status
-     * @return {@link HttpStatus} of the fault
+     * @return {@link HttpStatusCode} of the fault
      */
-    HttpStatus getStatus();
+    HttpStatusCode getStatus();
 
     /**
      * Gets description
