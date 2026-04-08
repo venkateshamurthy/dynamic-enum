@@ -24,7 +24,8 @@ public class DynamicEnumSetTest {
     // Concrete test dynamic enum type
     //@JsonTypeName("color")
     private record Color(String name, @JsonProperty Currency currency) implements DynamicEnum<Color>, ObjectMapped {
-        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance(Locale.getDefault()));
+        // Do not use Local.getDefault as CI pipeline testing breaks. so using Locale.FRANCE
+        public static final Color UNKNOWN = new Color("UNKNOWN", Currency.getInstance(Locale.FRANCE));
         public static final Color RED = new Color("RED", Currency.getInstance("INR"));
         public static final Color GREEN = new Color("GREEN", Currency.getInstance("USD"));
         public static final Color BLUE = new Color("BLUE", Currency.getInstance("CAD"));
