@@ -36,6 +36,7 @@ public interface DynamicEnum<E extends DynamicEnum<E>>  {
      * {@link Internal#register(Class, String, DynamicEnum) register} with internal registry this instance with name;
      * the class type is inferred automatically. In the usecases where the name is needed to register such as compact
      * constructor of record; this method can be utilized.
+     * @param name the name of the dynamic enum that would be registered with
      */
     default void register(@NonNull final String name) {
         Internal.register(getClass(), name, this);

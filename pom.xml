@@ -128,12 +128,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.11.3</version>
+                <version>${maven-javadoc-plugin.version}</version>
                 <configuration>
                     <source>17</source>
-                    <excludes><exclude>**/test/**</exclude></excludes>
-                    <excludePackageNames>**/*Test</excludePackageNames>
+                    <sourceFileExcludes><sourceFileExclude>**/test/**/*Test.java</sourceFileExclude></sourceFileExcludes>
                     <failOnError>false</failOnError>
+                    <excludes><exclude>**/test/**/*Test.java</exclude></excludes>
                 </configuration>
                 <executions>
                     <execution>

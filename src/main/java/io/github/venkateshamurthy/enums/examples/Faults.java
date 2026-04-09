@@ -46,6 +46,9 @@ public record Faults (
     /**
      * NOTE: Use compact constructor of record to register using the passed name..
      *       oe if you prefer use {@link #registerSelf()} on the object is fully constructed (not within compact constructor)
+     * @param name nae of the fault that would be used to register with
+     * @param description short description of the fault
+     * @param status the {@link HttpStatusCode} that this fault represents - usually in the context of microservice
      */
     public Faults { register(name);}
 
