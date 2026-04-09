@@ -128,7 +128,7 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "🔖 Releasing version: $VERSION from base POM (eg: 1.0.0-SNAPSHOT)"
           mvn -B versions:set -DnewVersion=$VERSION
-          mvn -B clean deploy
+          mvn -X -B clean deploy
 
       # ============================================================
       # 8️⃣ Deploy to GitHub Packages
@@ -137,7 +137,7 @@ jobs:
       # ============================================================
       - name: Deploy to GitHub Packages
         run: |
-          mvn -B deploy \
+          mvn -X -B deploy \
             -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/${{ github.repository }}
 
       # ============================================================

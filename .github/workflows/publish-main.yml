@@ -121,7 +121,7 @@ jobs:
 
       # 7️⃣ Publish Snapshot (only on main)
       - name: Publish Snapshot to Sonatype Central
-        run: mvn -B clean deploy
+        run: mvn -X -B clean deploy
 
 
       # ============================================================
@@ -131,7 +131,7 @@ jobs:
       # ============================================================
       - name: Deploy to GitHub Packages
         run: |
-          mvn -B deploy \
+          mvn -X -B deploy \
             -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/${{ github.repository }}
 
       # ============================================================
